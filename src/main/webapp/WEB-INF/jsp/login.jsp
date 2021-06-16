@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-    <title>Main</title>
+    <title>Login</title>
 </head>
 <script
         src="https://code.jquery.com/jquery-3.6.0.slim.js"
@@ -11,7 +11,7 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        $('#submit').click(function() {
+        $('#login').click(function() {
             var action = $("#loginform").attr('action');
             var form_data = {
                 user_email: $("#useremail").val(),
@@ -46,9 +46,9 @@
         <input type="text" id="useremail" name="useremail"/><br><br>
         <label for="userpassword">USERPASSWORD</label>
         <input type="password" id="userpassword" name="userpassword" placeholder="Password" required=""><br><br>
-        <button type="submit" id="submit">Sign in</button>
+        <button type="login" id="login">Sign in</button>
     </fieldset>
 </form>
-<div id="message"></div>
+<div id="message">Login</div>
 </body>
 </html>

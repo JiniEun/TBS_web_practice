@@ -38,6 +38,13 @@ public class MainController {
         log.info("LOGIN");
         return "login";
     }
+
+    @GetMapping("/JoinForm")
+    public String joinform() {
+        log.info("JOINFORM");
+        return "joinform";
+    }
+
     @GetMapping("/logincheck")
     public String logincheck() {
         log.info("LOGINCHECK");
