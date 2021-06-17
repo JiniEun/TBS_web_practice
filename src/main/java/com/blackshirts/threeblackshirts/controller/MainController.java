@@ -39,7 +39,7 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/JoinForm")
+    @GetMapping("/joinform")
     public String joinform() {
         log.info("JOINFORM");
         return "joinform";
