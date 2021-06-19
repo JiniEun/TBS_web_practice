@@ -4,6 +4,11 @@ public class User {
     private String useremail;
     private String userpassword;
 
+    public User(String useremail, String userpassword){
+        this.useremail = useremail;
+        this.userpassword = userpassword;
+    }
+
     @Override
     public String toString() {
         return "User{" +

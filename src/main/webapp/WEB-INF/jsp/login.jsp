@@ -14,8 +14,8 @@
         $('#login').click(function() {
             var action = $("#loginform").attr('action');
             var form_data = {
-                user_email: $("#useremail").val(),
-                user_pw: $("#userpassword").val(),
+                user_email: $("#useremail").value,
+                user_pw: $("#userpassword").value,
                 is_ajax: 1
             };
             console.log(form_data.user_email+"\t"+form_data.user_pw)
@@ -25,11 +25,10 @@
                 data: form_data,
                 success: function(response) {
                     if(response == 'success') {
-                        $("#message").html("<p style='color:green;font-weight:bold'>로그인 성공!</p>");
-                        $("#loginform").slideUp('slow');
+                        alert("로그인 성공!");
                     }
                     else {
-                        $("#message").html("<p style='color:red'>아이디 또는 비밀번호가 잘못되었습니다.</p>");
+                        alert("로그인 실패!");
                     }
                 }
             });

@@ -52,9 +52,22 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public String signup(User user) { // 회원 추가
+//    @RequestBody
+    public String signin(User user) { // 로그인
         userService.getUserInfoByUseremail(user.getUseremail());
+        log.info("GETUSEREMAIL");
+        log.info(user.getUseremail());
+        log.info(user.getUserpassword());
         return "redirect:/login";
+    }
+
+    @PostMapping("/joinform")
+    public User signup(@RequestBody User user) { // @ModelAttribute  회원 추가
+        userService.insertUser(user);
+        log.info("signup");
+        log.info(user.getUseremail());
+        log.info(user.getUserpassword());
+        return user;
     }
 
     @ResponseBody // 데이터를 보냄
