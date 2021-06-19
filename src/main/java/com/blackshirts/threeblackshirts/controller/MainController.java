@@ -51,6 +51,24 @@ public class MainController {
         return "logincheck";
     }
 
+    @GetMapping("/joincheck")
+    public String joincheck() {
+        log.info("JOINCHECK");
+        return "joincheck";
+    }
+
+    @PostMapping("/joincheck")
+    public String saveDetails(@RequestParam("useremail") String useremail,
+                              @RequestParam("userpassword") String userpassword,
+                              User user) {
+        log.info(useremail);
+        log.info(userpassword);
+        user.setUseremail(useremail);
+        user.setUserpassword(userpassword);
+        return "joincheck";
+    }
+
+
     @PostMapping("/login")
 //    @RequestBody
     public String signin(User user) { // 로그인

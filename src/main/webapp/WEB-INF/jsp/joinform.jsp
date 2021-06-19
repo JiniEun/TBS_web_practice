@@ -65,8 +65,8 @@
     <b>회원가입</b>
     <br><br><br>
     <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
-    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 JoinPro.jsp -->
-    <form method="post" action="@{/joinform}" id="joinform" name="userInfo" onsubmit="return checkValue()">
+    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp -->
+    <form method="post" action="joincheck" id="joinform" name="userInfo" onsubmit="return checkValue()">
         <table>
             <tr>
                 <td id="email">아이디</td>
