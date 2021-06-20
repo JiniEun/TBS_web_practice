@@ -11,7 +11,18 @@
         crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        $('#login').click(function() {
+        $('#submit').click(function() {
+
+            if($.trim($('#useremail').val()) === ''){
+                alert("아이디를 입력해 주세요.");
+                $('#useremail').focus();
+                return;
+            }else if($.trim($('#userpassword').val()) === ''){
+                alert("패스워드를 입력해 주세요.");
+                $('#userpassword').focus();
+                return;
+            }
+
             var action = $("#loginform").attr('action');
             var form_data = {
                 user_email: $("#useremail").value,
@@ -35,17 +46,24 @@
             return false;
         })
     })
+
+    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
+    function goJoinForm() {
+        location.href="/joinform";
+    }
+
 </script>
 <body>
 <h1>LOGIN PAGE</h1><br><br>
-<form id="loginform" method="POST" action="@{/login}" style="padding: 10px" > <!--action="@{/login}*/-->
+<form id="loginform" name="loginform" method="POST" action="logincheck" style="padding: 10px"> <!--action="@{/login}*/-->
     <fieldset>
         <legend>Login</legend>
         <label for="useremail">USEREMAIL</label>
         <input type="text" id="useremail" name="useremail"/><br><br>
         <label for="userpassword">USERPASSWORD</label>
         <input type="password" id="userpassword" name="userpassword" placeholder="Password" required=""><br><br>
-        <button type="login" id="login">Sign in</button>
+        <button type="submit" id="login" >로그인</button>
+        <button type="button" id="join" onclick="goJoinForm()" >회원가입</button>
     </fieldset>
 </form>
 <div id="message">Login</div>

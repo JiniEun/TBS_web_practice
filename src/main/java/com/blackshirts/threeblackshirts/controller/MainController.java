@@ -36,6 +36,7 @@ public class MainController {
     @GetMapping("/login")
     public String login() {
         log.info("LOGIN");
+        log.info("LOGIN");
         return "login";
     }
 
@@ -61,17 +62,45 @@ public class MainController {
     public String saveDetails(@RequestParam("useremail") String useremail,
                               @RequestParam("userpassword") String userpassword,
                               User user) {
-        log.info(useremail);
-        log.info(userpassword);
-        user.setUseremail(useremail);
-        user.setUserpassword(userpassword);
+        log.info("JOINCHECK");
+        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
+            log.info("success");
+        }else{
+            log.info("fail");
+        }
+//        log.info(useremail);
+//        log.info(userpassword);
+//        user.setUseremail(useremail);
+//        user.setUserpassword(userpassword);
+//        userService.insertUser(user);
+//        log.info("success");
         return "joincheck";
+    }
+
+    @PostMapping("/logincheck")
+    public String logincheck(@RequestParam("useremail") String useremail,
+                              @RequestParam("userpassword") String userpassword,
+                              User user) {
+        log.info("LOGINCHECK");
+        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
+            log.info("success");
+        }else{
+            log.info("fail");
+        }
+//        log.info(useremail);
+//        log.info(userpassword);
+//        user.setUseremail(useremail);
+//        user.setUserpassword(userpassword);
+//        userService.insertUser(user);
+//        log.info("success");
+        return "logincheck";
     }
 
 
     @PostMapping("/login")
 //    @RequestBody
-    public String signin(User user) { // 로그인
+    public String signin(@RequestParam("useremail") String useremail,
+                         @RequestParam("userpassword") String userpassword, User user) { // 로그인
         userService.getUserInfoByUseremail(user.getUseremail());
         log.info("GETUSEREMAIL");
         log.info(user.getUseremail());
@@ -80,11 +109,22 @@ public class MainController {
     }
 
     @PostMapping("/joinform")
-    public User signup(@RequestBody User user) { // @ModelAttribute  회원 추가
-        userService.insertUser(user);
-        log.info("signup");
-        log.info(user.getUseremail());
-        log.info(user.getUserpassword());
+    public User signup(@RequestParam("useremail") String useremail,
+                       @RequestParam("userpassword") String userpassword,
+                       User user) { // @ModelAttribute  회원 추가
+        log.info("JOINFORMPOST");
+        if(!useremail.isEmpty() && !userpassword.isEmpty()){
+            log.info("signup");
+            log.info(useremail);
+            log.info(userpassword);
+            user.setUseremail(useremail);
+            user.setUserpassword(userpassword);
+            userService.insertUser(user);
+            log.info("success");
+        }else{
+            log.info("fail");
+        }
+
         return user;
     }
 

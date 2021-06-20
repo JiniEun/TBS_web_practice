@@ -10,54 +10,74 @@
         integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
         crossorigin="anonymous"></script>
 <script>
-    $(document).ready(function() {
-        $('#submit').click(function() {
-            var action = $("#joinform").attr('action');
-            var form_data = {
-                user_email: $("#useremail").val(),
-                user_pw: $("#userpassword").val(),
-                is_ajax: 1
-            };
-            console.log(form_data.user_email+"\t"+form_data.user_pw)
-            $.ajax({
-                type: "POST",
-                url: action,
-                data: form_data,
-                success: function(response) {
-                    if(response == 'success') {
-                        alert("회원가입 성공!");
-                    }
-                    else {
-                        alert("회원가입 실패!");
-                    }
-                }
-            });
-            return false;
-        })
-    })
+    // $(document).ready(function () {
+    //     $('#submit').click(function () {
+    //         var action = $("#joinform").attr('action');
+    //         var form_data = {
+    //             user_email: $("#useremail").val(),
+    //             user_pw: $("#userpassword").val(),
+    //             is_ajax: 1
+    //         };
+    //
+    //         // 입력 값 체크
+    //         if(form_data.user_email == ''){
+    //             alert("아이디를 입력해 주세요.");
+    //             $('#useremail').focus();
+    //             return;
+    //         }else if(form_data.user_pw == ''){
+    //             alert("패스워드를 입력해 주세요.");
+    //             $('#userpassword').focus();
+    //             return;
+    //         }
+    //         console.log(form_data.user_email + "\t" + form_data.user_pw)
+    //         $.ajax({
+    //             type: "POST",
+    //             url: action,
+    //             data: form_data,
+    //             success: function(data){
+    //                 if(data == "false")
+    //                     alert('잘못된 아이디이거나, 비밀번호가 틀렸습니다.') ;
+    //                 else
+    //                     alert("회원가입 성공!");
+    //             },
+    //             error: function(){
+    //                 alert("err");
+    //             }
+    //         });
+    //         return false;
+    //     })
+    // })
+
     function checkValue(){
-        if(!document.userInfo.useremail.value){
+        if (!document.userInfo.useremail.value) {
             alert("아이디를 입력하세요.");
             return false;
         }
-
-        // if(document.userInfo.useremail.value){
-        //     alert("아이디를 입력하세요.");
-        //     return false;
-        // }
-
-        if(!document.userInfo.userpassword.value){
+        if (!document.userInfo.userpassword.value) {
             alert("비밀번호를 입력하세요.");
             return false;
         }
-
         // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
-        if(document.userInfo.userpassword.value !== document.userInfo.passwordcheck.value ){
+        if (document.userInfo.userpassword.value !== document.userInfo.passwordcheck.value) {
             alert("비밀번호를 동일하게 입력하세요.");
             return false;
         }
-
     }
+
+    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
+    function goLoginForm() {
+        location.href="/login";
+    }
+
+
+    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
+    function signup() {
+        if(checkValue()){
+            alert("signup");
+            location.href="/login";
+        }
+    }
+
 </script>
 <body>
 <div id="wrap">
@@ -66,23 +86,21 @@
     <br><br><br>
     <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
     <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp -->
-    <form method="post" action="joincheck" id="joinform" name="userInfo" onsubmit="return checkValue()">
+    <form method="post" action="joinform" id="joinform" name="userInfo" onsubmit="return checkValue()">
         <table>
             <tr>
                 <td id="email">아이디</td>
                 <td>
                     <input type="text" name="useremail" maxlength="50">
-                    <input type="button" value="중복확인" >
+                    <input type="button" value="중복확인" onclick="">
                 </td>
             </tr>
-
             <tr>
                 <td id="pw">비밀번호</td>
                 <td>
                     <input type="password" name="userpassword" maxlength="50">
                 </td>
             </tr>
-
             <tr>
                 <td id="pw_check">비밀번호 확인</td>
                 <td>
@@ -91,7 +109,7 @@
             </tr>
         </table>
         <br>
-        <input type="submit" value="가입"/>
+        <input type="submit" value="가입" onclick="signup()"/>
         <input type="button" value="취소" onclick="goLoginForm()">
     </form>
 </div>

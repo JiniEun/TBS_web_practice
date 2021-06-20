@@ -25,11 +25,18 @@
         // request 객체로부터 파라미터를 가져옴.
         String email = request.getParameter("useremail");
         String password = request.getParameter("userpassword");
-        System.out.println("email check"+email);
+        System.out.println("email check : "+email);
     %>
     <ul>
-        <li>이메일: ${request.getParameter("useremail")}</li>
-        <li>비밀번호: ${request.getParameter("userpassword")}</li>
+        <li>이메일: ${email}</li>
+        <li>비밀번호: ${password}</li>
+        <li:forEach items="${User}" var="User">
+            <tr>
+                <td>${User.id}</td>
+                <td>${User.pw}</td>
+                <td>${User.money}</td>
+            </tr>
+        </li:forEach>
     </ul>
 
 </div>
