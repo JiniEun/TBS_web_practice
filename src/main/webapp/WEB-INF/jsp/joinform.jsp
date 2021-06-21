@@ -73,7 +73,7 @@
     // 회원가입 버튼 클릭시 회원가입 화면으로 이동
     function signup() {
         if(checkValue()){
-            alert("signup");
+            alert("회원가입 완료");
             location.href="/login";
         }
     }
