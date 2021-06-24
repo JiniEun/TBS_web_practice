@@ -49,6 +49,18 @@
     // })
 
     function checkValue(){
+        alert(document.userInfo.useremail.value);
+        var email = document.userInfo.useremail.value;
+        var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+        if(exptext.test(email)==false){
+            //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우
+            alert("이 메일형식이 올바르지 않습니다.");
+            $('#useremail').focus();
+            return false;
+
+        }
+
         if (!document.userInfo.useremail.value) {
             alert("아이디를 입력하세요.");
             return false;
@@ -91,7 +103,7 @@
             <tr>
                 <td id="email">아이디</td>
                 <td>
-                    <input type="text" name="useremail" maxlength="50">
+                    <input type="text" id="useremail" name="useremail" maxlength="50">
                     <input type="button" value="중복확인" onclick="">
                 </td>
             </tr>
