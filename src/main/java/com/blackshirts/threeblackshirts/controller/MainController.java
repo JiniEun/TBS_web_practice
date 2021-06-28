@@ -6,9 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 //@RestController // 데이터를 반환하는 어노테이션
 @Controller // 페이지를 반환하는 어노테이션
@@ -52,6 +57,8 @@ public class MainController {
         return "logincheck";
     }
 
+
+
     @GetMapping("/joincheck")
     public String joincheck() {
         log.info("JOINCHECK");
@@ -84,6 +91,7 @@ public class MainController {
         log.info("LOGINCHECK");
         if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
             log.info("success");
+//            response.getWriter().write("loginFail");
         }else{
             log.info("fail");
         }
@@ -98,33 +106,51 @@ public class MainController {
 
 
     @PostMapping("/login")
-//    @RequestBody
-    public String signin(@RequestParam("useremail") String useremail,
+    public String signin(HttpSession session, @RequestParam("useremail") String useremail,
                          @RequestParam("userpassword") String userpassword, User user) { // 로그인
-        userService.getUserInfoByUseremail(user.getUseremail());
-        log.info("GETUSEREMAIL");
-        log.info(user.getUseremail());
-        log.info(user.getUserpassword());
-        return "redirect:/login";
+
+        if(user.getUseremail().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()) && user.getUserpassword().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUserpassword())){
+            session.setAttribute("useremail", useremail);
+            log.info("signin");
+            log.info(user.getUseremail() + " , " + user.getUserpassword());
+            return "redirect:/login.jsp";
+        }else{
+            return "redirect:/err.jsp";
+        }
+
+
+    }
+
+    @RequestMapping()
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login.jsp";
     }
 
     @PostMapping("/joinform")
     public User signup(@RequestParam("useremail") String useremail,
-                       @RequestParam("userpassword") String userpassword,
-                       User user) { // @ModelAttribute  회원 추가
+                       @RequestParam("userpassword") String userpassword, User user) { // , HttpServletResponse response@ModelAttribute  회원 추가
         log.info("JOINFORMPOST");
         if(!useremail.isEmpty() && !userpassword.isEmpty()){
-            log.info("signup");
-            log.info(useremail);
-            log.info(userpassword);
+            log.info("email:"+ useremail + ",  pw:" + userpassword);
             user.setUseremail(useremail);
             user.setUserpassword(userpassword);
-            userService.insertUser(user);
-            log.info("success");
+            log.info(user.toString());
+            log.info("signup");
+            if(user.getUseremail().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUseremail())){
+                log.info("exist in DB");
+//                try {
+//                    response.getWriter().write("JoinFail");
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+            }else{
+                log.info("success");
+                userService.insertUser(user);
+            }
         }else{
             log.info("fail");
         }
-
         return user;
     }
 
