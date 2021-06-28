@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //@RestController // 데이터를 반환하는 어노테이션
@@ -41,7 +40,6 @@ public class MainController {
     @GetMapping("/login")
     public String login() {
         log.info("LOGIN");
-        log.info("LOGIN");
         return "login";
     }
 
@@ -57,100 +55,105 @@ public class MainController {
         return "logincheck";
     }
 
-
-
     @GetMapping("/joincheck")
     public String joincheck() {
         log.info("JOINCHECK");
         return "joincheck";
     }
 
-    @PostMapping("/joincheck")
-    public String saveDetails(@RequestParam("useremail") String useremail,
-                              @RequestParam("userpassword") String userpassword,
-                              User user) {
-        log.info("JOINCHECK");
-        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
-            log.info("success");
-        }else{
-            log.info("fail");
-        }
-//        log.info(useremail);
-//        log.info(userpassword);
-//        user.setUseremail(useremail);
-//        user.setUserpassword(userpassword);
-//        userService.insertUser(user);
-//        log.info("success");
-        return "joincheck";
-    }
 
-    @PostMapping("/logincheck")
-    public String logincheck(@RequestParam("useremail") String useremail,
-                              @RequestParam("userpassword") String userpassword,
-                              User user) {
-        log.info("LOGINCHECK");
-        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
-            log.info("success");
-//            response.getWriter().write("loginFail");
-        }else{
-            log.info("fail");
-        }
-//        log.info(useremail);
-//        log.info(userpassword);
-//        user.setUseremail(useremail);
-//        user.setUserpassword(userpassword);
-//        userService.insertUser(user);
-//        log.info("success");
-        return "logincheck";
-    }
+//    @PostMapping("/logincheck")
+//    public String logincheck(@RequestParam("useremail") String useremail,
+//                             @RequestParam("userpassword") String userpassword,
+//                             User user) {
+//        log.info("LOGINCHECK");
+//        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
+//            log.info("login_success");
+//        }else{
+//            log.info("login_fail");
+//        }
+//
+//        return "logincheck";
+//    }
 
 
     @PostMapping("/login")
-    public String signin(HttpSession session, @RequestParam("useremail") String useremail,
-                         @RequestParam("userpassword") String userpassword, User user) { // 로그인
-
-        if(user.getUseremail().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()) && user.getUserpassword().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUserpassword())){
-            session.setAttribute("useremail", useremail);
-            log.info("signin");
-            log.info(user.getUseremail() + " , " + user.getUserpassword());
-            return "redirect:/login.jsp";
-        }else{
-            return "redirect:/err.jsp";
+    public String signin(@RequestParam("useremail") String useremail,
+                         @RequestParam("userpassword") String userpassword, User user, HttpSession session) throws Exception{ // 로그인
+        log.info("LoginPost");
+        if(session.getAttribute("login") != null) {
+            session.removeAttribute("login");
         }
 
+        if(!useremail.isEmpty() && !userpassword.isEmpty()){
+            log.info("Login");
+            log.info("user email:"+ useremail + ",  pw:" + userpassword);
+            user.setUseremail(useremail);
+            user.setUserpassword(userpassword);
 
+            boolean flag = false;
+            String pwcheck = "";
+            List<User> userList= null;
+            userList = userService.selectUserInfo();
+            for(User u : userList){
+                if(u.getUseremail().equals(user.getUseremail())){
+                    flag = true;
+                    pwcheck = u.getUserpassword();
+                    break;
+                }
+            }
+            if(flag && pwcheck.equals(user.getUserpassword())){
+                log.info("login_success");
+                session.setAttribute("login",user);
+                return "redirect:/logincheck";
+            }else {
+                log.info("login_fail: No exist in DB");
+                return "redirect:/err";
+            }
+        }
+
+        return "redirect:/login";
     }
 
-    @RequestMapping()
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login.jsp";
+        log.info("ByeBye Logout success");
+        return "redirect:/login";
     }
 
     @PostMapping("/joinform")
     public User signup(@RequestParam("useremail") String useremail,
-                       @RequestParam("userpassword") String userpassword, User user) { // , HttpServletResponse response@ModelAttribute  회원 추가
+                       @RequestParam("userpassword") String userpassword,
+                       User user) { // @ModelAttribute  회원 추가
         log.info("JOINFORMPOST");
         if(!useremail.isEmpty() && !userpassword.isEmpty()){
-            log.info("email:"+ useremail + ",  pw:" + userpassword);
+            log.info("signup");
+            log.info("user email:"+ useremail + ",  pw:" + userpassword);
             user.setUseremail(useremail);
             user.setUserpassword(userpassword);
-            log.info(user.toString());
-            log.info("signup");
-            if(user.getUseremail().equals(userService.getUserInfoByUseremail(user.getUseremail()).getUseremail())){
-                log.info("exist in DB");
-//                try {
-//                    response.getWriter().write("JoinFail");
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-            }else{
-                log.info("success");
-                userService.insertUser(user);
+            log.info("User" + user.toString());
+
+            boolean flag = true;
+            List<User> userList= null;
+            userList = userService.selectUserInfo();
+            for(User u : userList){
+                if(u.getUseremail().equals(user.getUseremail())){
+                    flag = false;
+                    break;
+                }
             }
+            if(flag){
+                userService.insertUser(user);
+                log.info("join_success");
+            }else{
+                log.info("join_fail:exist in DB");
+            }
+
         }else{
-            log.info("fail");
-        }
+            log.info("join_fail");
+       }
+// 비교가 안됨. useremail 가져와서 비교하기
         return user;
     }
 

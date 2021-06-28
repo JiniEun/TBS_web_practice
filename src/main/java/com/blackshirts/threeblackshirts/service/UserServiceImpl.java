@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserInfoByUseremail(String useremail) {
-        return rep.selectUserInfoByUseremail(useremail);
+        return rep.selectUserInfo(useremail);
     }
 
     // repository는 DB와 연결되므로 이름지을 때 CRUD를 이용하고
