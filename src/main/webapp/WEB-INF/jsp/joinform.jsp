@@ -47,74 +47,75 @@
     //         return false;
     //     })
     // })
+
+
     function checkValue(){
+        var flag = true;
         console.log(document.joinform.useremail.value);
+        console.log(document.joinform.userpassword.value);
         var email = document.joinform.useremail.value;
         var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
         if(exptext.test(email)==false){
             //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우
-            alert("이 메일형식이 올바르지 않습니다.");
+            alert("이메일형식이 올바르지 않습니다.");
             $('#useremail').focus();
+            console.log("이메일형식이 올바르지 않습니다.");
+            flag = false;
             return false;
         }
         if (!document.joinform.useremail.value) {
             alert("아이디를 입력하세요.");
+            console.log("아이디를 입력하세요.");
+            flag = false;
             return false;
         }
         if (!document.joinform.userpassword.value) {
             alert("비밀번호를 입력하세요.");
+            console.log("비밀번호를 입력하세요.");
+            flag = false;
             return false;
         }
         // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
         if (document.joinform.userpassword.value !== document.joinform.passwordcheck.value) {
             alert("비밀번호를 동일하게 입력하세요.");
+            console.log("비밀번호를 동일하게 입력하세요.");
+            flag = false;
             return false;
+        }
+        if(flag){
+            alert("회원가입 완료");
+            console.log("join_success");
+        }else{
+            alert("회원가입 실패");
+            console.log("join_fail");
         }
     }
     // 회원가입 버튼 클릭시 회원가입 화면으로 이동
     function goLoginForm() {
         location.href="/login";
     }
-    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
-    function signup() {
-        if(checkValue()){
-            alert("회원가입 완료");
-            location.href="/login";
-        }
-    }
+
 </script>
 <body>
 <div id="wrap">
     <br><br>
-    <b>회원가입</b>
+    <h1>회원가입</h1>
     <br><br><br>
     <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
-    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp onsubmit="return checkValue()"-->
-    <form method="post" action="joinform" id="joinform" name="joinform">
-        <table>
-            <tr>
-                <td id="email">아이디</td>
-                <td>
-                    <input type="text" id="useremail" name="useremail" maxlength="50">
-<%--                    <input type="button" value="중복확인" onclick="">--%>
-                </td>
-            </tr>
-            <tr>
-                <td id="pw">비밀번호</td>
-                <td>
-                    <input type="password" name="userpassword" maxlength="50">
-                </td>
-            </tr>
-            <tr>
-                <td id="pw_check">비밀번호 확인</td>
-                <td>
-                    <input type="password" name="passwordcheck" maxlength="50">
-                </td>
-            </tr>
-        </table>
+    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp onsubmit="return checkValue()"  onclick="signup()"-->
+    <form method="post" action="joinform" id="joinform" name="joinform" style="padding: 10px" onsubmit="return checkValue()">
+        <fieldset>
+            <legend>Sign Up</legend>
+            <label for="useremail">USEREMAIL</label>
+            <input type="text" id="useremail" name="useremail" maxlength="50"/><br><br>
+            <label for="userpassword">USERPASSWORD</label>
+            <input type="password" id="userpassword" name="userpassword" placeholder="Password" maxlength="50" required="" ><br><br>
+            <label for="userpassword">비밀번호 확인</label>
+            <input type="password" name="passwordcheck" maxlength="50"><br><br>
+            <input type="submit" value="가입"/>
+            <input type="button" value="로그인" onclick="goLoginForm()">
+        </fieldset>
         <br>
-        <input type="submit" value="가입" onclick="signup()"/>
-        <input type="button" value="취소" onclick="goLoginForm()">
     </form>
 </div>
 </body>
