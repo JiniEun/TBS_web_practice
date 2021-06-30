@@ -100,7 +100,7 @@
 <div id="wrap">
     <br><br>
     <h1>회원가입</h1>
-    <br><br><br>
+    <br>
     <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
     <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp onsubmit="return checkValue()"  onclick="signup()"-->
     <form method="post" action="joinform" id="joinform" name="joinform" style="padding: 10px" onsubmit="return checkValue()">
@@ -109,7 +109,7 @@
             <label for="useremail">USEREMAIL</label>
             <input type="text" id="useremail" name="useremail" maxlength="50"/><br><br>
             <label for="userpassword">USERPASSWORD</label>
-            <input type="password" id="userpassword" name="userpassword" placeholder="Password" maxlength="50" required="" ><br><br>
+            <input type="password" id="userpassword" name="userpassword" placeholder="Password" maxlength="50" minlength="4"><br><br>
             <label for="userpassword">비밀번호 확인</label>
             <input type="password" name="passwordcheck" maxlength="50"><br><br>
             <input type="submit" value="가입"/>

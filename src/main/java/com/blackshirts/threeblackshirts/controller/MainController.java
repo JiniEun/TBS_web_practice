@@ -113,7 +113,11 @@ public class MainController {
                 session.setAttribute("login",user);
                 return "redirect:/logincheck";
             }else {
-                log.info("login_fail: No exist in DB");
+                if(flag && !pwcheck.equals(user.getUserpassword())){
+                    log.info("login_fail: Wrong password");
+                }else {
+                    log.info("login_fail: No exist in DB");
+                }
                 return "redirect:/err";
             }
         }
