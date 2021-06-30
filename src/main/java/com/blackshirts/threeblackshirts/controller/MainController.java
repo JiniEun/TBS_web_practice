@@ -61,6 +61,12 @@ public class MainController {
         return "joincheck";
     }
 
+    @GetMapping("/err")
+    public String err() {
+        log.info("ERR");
+        return "err";
+    }
+
 
 //    @PostMapping("/logincheck")
 //    public String logincheck(@RequestParam("useremail") String useremail,
