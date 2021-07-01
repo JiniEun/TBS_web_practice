@@ -133,15 +133,12 @@ public class MainController {
     }
 
     @PostMapping("/joinform")
-    public User signup(@RequestParam("useremail") String useremail,
-                       @RequestParam("userpassword") String userpassword,
-                       User user) { // @ModelAttribute  회원 추가
+    public User signup(User user) { // @ModelAttribute  회원 추가 @RequestParam("useremail") String useremail,
+       // @RequestParam("userpassword") String userpassword,
         log.info("JOINFORMPOST");
-        if(!useremail.isEmpty() && !userpassword.isEmpty()){
+        if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
             log.info("signup");
-            log.info("user email:"+ useremail + ",  pw:" + userpassword);
-            user.setUseremail(useremail);
-            user.setUserpassword(userpassword);
+            log.info("user email: " + user.getUseremail() + ",  pw: " + user.getUserpassword());
             log.info("User" + user.toString());
 
             boolean flag = true;

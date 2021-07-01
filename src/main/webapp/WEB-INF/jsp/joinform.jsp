@@ -11,51 +11,36 @@
         crossorigin="anonymous"></script>
 <script>
     // $(document).ready(function () {
-    //     $('#submit').click(function () {
-    //         var action = $("#joinform").attr('action');
-    //         var form_data = {
-    //             user_email: $("#useremail").val(),
-    //             user_pw: $("#userpassword").val(),
-    //             is_ajax: 1
-    //         };
+    //     var action = $("#joinform").attr('action');
+    //     var form_data = {
+    //         user_email: $("#useremail").val(),
+    //         user_pw: $("#userpassword").val(),
+    //         // is_ajax: 1
+    //     };
     //
-    //         // 입력 값 체크
-    //         if(form_data.user_email == ''){
-    //             alert("아이디를 입력해 주세요.");
-    //             $('#useremail').focus();
-    //             return;
-    //         }else if(form_data.user_pw == ''){
-    //             alert("패스워드를 입력해 주세요.");
-    //             $('#userpassword').focus();
-    //             return;
-    //         }
-    //         console.log(form_data.user_email + "\t" + form_data.user_pw)
-    //         $.ajax({
-    //             type: "POST",
-    //             url: action,
-    //             data: form_data,
-    //             success: function(data){
-    //                 if(data == "false")
-    //                     alert('잘못된 아이디이거나, 비밀번호가 틀렸습니다.') ;
-    //                 else
-    //                     alert("회원가입 성공!");
-    //             },
-    //             error: function(){
-    //                 alert("err");
-    //             }
-    //         });
-    //         return false;
-    //     })
-    // })
+    //     $("form").submit(function (event) {
+    //         event.preventDefault();
+    //         //
+    //         checkValue();
+    //     });
+    //     //
+    //     // $('#submit').click(function () {
+    //     //     $("form").submit();
+    //     // });
+    // });
 
-
-    function checkValue(){
+    function checkValue() {
         var flag = true;
-        console.log(document.joinform.useremail.value);
-        console.log(document.joinform.userpassword.value);
-        var email = document.joinform.useremail.value;
+        var form_data = {
+            user_email: $("#useremail").val(),
+            user_pw: $("#userpassword").val(),
+        };
+        console.log("useremail: "+ form_data.user_email + "\t userpw: " + form_data.user_pw)
+        // console.log(document.joinform.useremail.value);
+        // console.log(document.joinform.userpassword.value);
+        var email = form_data.user_email;
         var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-        if(exptext.test(email)==false){
+        if (exptext.test(email) == false) {
             //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우
             alert("이메일형식이 올바르지 않습니다.");
             $('#useremail').focus();
@@ -63,36 +48,39 @@
             flag = false;
             return false;
         }
-        if (!document.joinform.useremail.value) {
+        if (!email) {
             alert("아이디를 입력하세요.");
             console.log("아이디를 입력하세요.");
             flag = false;
             return false;
         }
-        if (!document.joinform.userpassword.value) {
+        if (!form_data.user_pw) {
             alert("비밀번호를 입력하세요.");
             console.log("비밀번호를 입력하세요.");
             flag = false;
             return false;
         }
         // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
-        if (document.joinform.userpassword.value !== document.joinform.passwordcheck.value) {
+        if (form_data.user_pw !== document.joinform.passwordcheck.value) {
             alert("비밀번호를 동일하게 입력하세요.");
             console.log("비밀번호를 동일하게 입력하세요.");
             flag = false;
             return false;
         }
-        if(flag){
+        if (flag) {
             alert("회원가입 완료");
             console.log("join_success");
-        }else{
+        } else {
             alert("회원가입 실패");
             console.log("join_fail");
         }
     }
+
+    // $('form').bind('submit', checkValue());
+
     // 회원가입 버튼 클릭시 회원가입 화면으로 이동
     function goLoginForm() {
-        location.href="/login";
+        location.href = "/login";
     }
 
 </script>
@@ -102,14 +90,15 @@
     <h1>회원가입</h1>
     <br>
     <!-- 입력한 값을 전송하기 위해 form 태그를 사용한다 -->
-    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp onsubmit="return checkValue()"  onclick="signup()"-->
+    <!-- 값(파라미터) 전송은 POST 방식, 전송할 페이지는 joincheck.jsp onclick="signup()"  onsubmit="return checkValue()"-->
     <form method="post" action="joinform" id="joinform" name="joinform" style="padding: 10px" onsubmit="return checkValue()">
         <fieldset>
             <legend>Sign Up</legend>
             <label for="useremail">USEREMAIL</label>
             <input type="text" id="useremail" name="useremail" maxlength="50"/><br><br>
             <label for="userpassword">USERPASSWORD</label>
-            <input type="password" id="userpassword" name="userpassword" placeholder="Password" maxlength="50" minlength="4"><br><br>
+            <input type="password" id="userpassword" name="userpassword" placeholder="Password" maxlength="50"
+                   minlength="4"><br><br>
             <label for="userpassword">비밀번호 확인</label>
             <input type="password" name="passwordcheck" maxlength="50"><br><br>
             <input type="submit" value="가입"/>
