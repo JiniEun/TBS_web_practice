@@ -84,18 +84,15 @@ public class MainController {
 
 
     @PostMapping("/login")
-    public String signin(@RequestParam("useremail") String useremail,
-                         @RequestParam("userpassword") String userpassword, User user, HttpSession session) throws Exception{ // 로그인
+    public String signin(User user, HttpSession session) throws Exception{ // 로그인
         log.info("LoginPost");
         if(session.getAttribute("login") != null) {
             session.removeAttribute("login");
         }
 
-        if(!useremail.isEmpty() && !userpassword.isEmpty()){
+        if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
             log.info("Login");
-            log.info("user email:"+ useremail + ",  pw:" + userpassword);
-            user.setUseremail(useremail);
-            user.setUserpassword(userpassword);
+            log.info("user email: " + user.getUseremail() + ",  pw: " + user.getUserpassword());
 
             boolean flag = false;
             String pwcheck = "";
@@ -160,7 +157,7 @@ public class MainController {
         }else{
             log.info("join_fail");
        }
-// 비교가 안됨. useremail 가져와서 비교하기
+        // 비교가 안됨. useremail 가져와서 비교하기
         return user;
     }
 
