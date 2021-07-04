@@ -130,8 +130,7 @@ public class MainController {
     }
 
     @PostMapping("/joinform")
-    public User signup(User user) { // @ModelAttribute  회원 추가 @RequestParam("useremail") String useremail,
-       // @RequestParam("userpassword") String userpassword,
+    public User signup(User user) { // @ModelAttribute 회원 추가 @RequestParam("useremail") String useremail,
         log.info("JOINFORMPOST");
         if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
             log.info("signup");
@@ -157,7 +156,7 @@ public class MainController {
         }else{
             log.info("join_fail");
        }
-        // 비교가 안됨. useremail 가져와서 비교하기
+
         return user;
     }
 
