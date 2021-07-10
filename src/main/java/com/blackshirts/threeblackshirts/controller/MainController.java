@@ -55,10 +55,16 @@ public class MainController {
         return "logincheck";
     }
 
-    @GetMapping("/joincheck")
-    public String joincheck() {
-        log.info("JOINCHECK");
-        return "joincheck";
+    @GetMapping("/signup")
+    public String signup() {
+        log.info("SignUp");
+        return "signup";
+    }
+
+    @GetMapping("/signin")
+    public String signin() {
+        log.info("SignIn");
+        return "signin";
     }
 
     @GetMapping("/err")
@@ -66,7 +72,6 @@ public class MainController {
         log.info("ERR");
         return "err";
     }
-
 
 //    @PostMapping("/logincheck")
 //    public String logincheck(@RequestParam("useremail") String useremail,
@@ -84,7 +89,7 @@ public class MainController {
 
 
     @PostMapping("/login")
-    public String signin(User user, HttpSession session) throws Exception{ // 로그인
+    public String login(User user, HttpSession session) throws Exception{ // 로그인
         log.info("LoginPost");
         if(session.getAttribute("login") != null) {
             session.removeAttribute("login");
@@ -130,7 +135,7 @@ public class MainController {
     }
 
     @PostMapping("/joinform")
-    public User signup(User user) { // @ModelAttribute 회원 추가 @RequestParam("useremail") String useremail,
+    public User join(User user) { // @ModelAttribute 회원 추가 @RequestParam("useremail") String useremail,
         log.info("JOINFORMPOST");
         if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
             log.info("signup");
@@ -161,6 +166,17 @@ public class MainController {
     }
 
     @ResponseBody // 데이터를 보냄
+    @PostMapping("/user")
+    public boolean getUser(@RequestBody User user) {
+        log.error("USER");
+        log.info(user.getUseremail());
+        User users = userService.getUserInfoByUseremail(user.getUseremail());
+        if(users == null)
+            return false;
+        return true;
+    }
+
+    @ResponseBody // 데이터를 보냄
     @GetMapping("/users")
     public List<User> user() {
         log.error("USERS");
@@ -177,8 +193,27 @@ public class MainController {
 
     @ResponseBody
     @GetMapping("/insert")
-    public void insert(User user) {
+    public void insertuser(User user) {
         userService.insertUser(user);
         System.out.println("INSERT");
+    }
+
+    @ResponseBody
+    @PostMapping("/insert")
+    public boolean insert(@RequestBody User user) {
+        try{
+            userService.insertUser(user);
+            return true;
+        } catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/insert")
+    public boolean check(@RequestBody User user) {
+        User getUser = userService.getUserInfoByUseremail(user.getUseremail());
+        return getUser.getUserpassword().equals(user.getUserpassword());
     }
 }

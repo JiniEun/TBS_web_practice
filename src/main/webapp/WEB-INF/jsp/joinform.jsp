@@ -61,7 +61,7 @@
             return false;
         }
         // 비밀번호와 비밀번호 확인에 입력된 값이 동일한지 확인
-        if (form_data.user_pw !== document.joinform.passwordcheck.value) {
+        if (form_data.user_pw !== document.joinform.passwordcheck.value) { // jquery 통일
             alert("비밀번호를 동일하게 입력하세요.");
             console.log("비밀번호를 동일하게 입력하세요.");
             flag = false;

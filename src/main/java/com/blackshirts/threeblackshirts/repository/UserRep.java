@@ -10,4 +10,5 @@ public interface UserRep {
     List<User> selectUserInfo();
     void insertUser(User user);
     User selectUserInfo(String useremail);
+    User selectUserInfoByUseremail(String useremail);
 }
