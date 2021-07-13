@@ -124,11 +124,9 @@ public class MainController {
                 log.info("user_pw_check: " + String.valueOf(user.getUserpassword().equals(user_check.getUserpassword())));
                 log.info("join_fail:exist in DB");
             }
-
         } else {
             log.info("join_fail");
         }
-
         return user;
     }
 
