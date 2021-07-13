@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-    <title>Login</title>
+    <title>SignIn</title>
 </head>
 <script
         src="https://code.jquery.com/jquery-3.6.0.slim.js"
@@ -11,16 +11,16 @@
         crossorigin="anonymous"></script>
 
 <body>
-<h1>LOGIN PAGE</h1><br><br>
+<h1>Sign In PAGE</h1><br><br>
 
 <fieldset>
-    <legend>Login</legend>
+    <legend>Sign In</legend>
     <label for="useremail">USEREMAIL</label>
     <input type="text" id="useremail" name="useremail"/><br><br>
     <label for="userpassword">USERPASSWORD</label>
     <input type="password" id="userpassword" name="userpassword" placeholder="Password" required=""><br><br>
     <button type="submit" id="login">로그인</button>
-    <button type="button" id="join" onclick="goJoinForm()">회원가입</button>
+    <button type="button" id="join" onclick="goSignupForm()">회원가입</button>
 </fieldset>
 
 <div id="message">Login</div>
@@ -31,7 +31,7 @@
             $.ajax({
                 type:"POST",
                 url:"",
-                contentType:"application/json; charset-utf-8",
+                contentType:"application/json; charset=EUC-KR",
                 data : JSON.stringify({useremail:$('#useremail').val(), userpassword:$('#userpassword').val()})
             })
             .done((res) => {
@@ -44,8 +44,8 @@
     })
 
     // 회원가입 버튼 클릭시 회원가입 화면으로 이동
-    function goJoinForm() {
-        location.href = "/joinform";
+    function goSignupForm() {
+        location.href = "/signup";
     }
 
 </script>

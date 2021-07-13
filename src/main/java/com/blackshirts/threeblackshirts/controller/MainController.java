@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -26,15 +27,22 @@ public class MainController {
     // localhost:8080/
     @GetMapping("/")
     public String main() {
-        log.debug("MAIN");
+        log.info("MAIN");
         return "main";
+    }
+
+    // localhost:8080/
+    @GetMapping("/signup")
+    public String signup() {
+        log.info("SignUp");
+        return "signup";
     }
     //localhost:8080/test
 
-    @GetMapping("/test")
+    @GetMapping("/signin")
     public String test() {
-        log.info("TEST");
-        return "test";
+        log.info("SignIn");
+        return "signin";
     }
 
     @GetMapping("/login")
@@ -55,112 +63,71 @@ public class MainController {
         return "logincheck";
     }
 
-    @GetMapping("/signup")
-    public String signup() {
-        log.info("SignUp");
-        return "signup";
-    }
-
-    @GetMapping("/signin")
-    public String signin() {
-        log.info("SignIn");
-        return "signin";
-    }
-
     @GetMapping("/err")
     public String err() {
         log.info("ERR");
         return "err";
     }
 
-//    @PostMapping("/logincheck")
-//    public String logincheck(@RequestParam("useremail") String useremail,
-//                             @RequestParam("userpassword") String userpassword,
-//                             User user) {
-//        log.info("LOGINCHECK");
-//        if(useremail == userService.getUserInfoByUseremail(user.getUseremail()).getUseremail()){
-//            log.info("login_success");
-//        }else{
-//            log.info("login_fail");
-//        }
-//
-//        return "logincheck";
-//    }
-
-
     @PostMapping("/login")
-    public String login(User user, HttpSession session) throws Exception{ // 로그인
+    public String login(User user, HttpSession session) throws Exception { // 로그인
         log.info("LoginPost");
-        if(session.getAttribute("login") != null) {
+        if (session.getAttribute("login") != null) {
             session.removeAttribute("login");
         }
 
-        if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
+        if (!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()) {
             log.info("Login");
-            log.info("user email: " + user.getUseremail() + ",  pw: " + user.getUserpassword());
+            log.info("user_check: " + user.toString());
 
-            boolean flag = false;
-            String pwcheck = "";
-            List<User> userList= null;
-            userList = userService.selectUserInfo();
-            for(User u : userList){
-                if(u.getUseremail().equals(user.getUseremail())){
-                    flag = true;
-                    pwcheck = u.getUserpassword();
-                    break;
-                }
-            }
-            if(flag && pwcheck.equals(user.getUserpassword())){
+            User user_check = userService.getUserInfoByUseremail(user.getUseremail());
+            log.info("db_user_check: " + user_check.toString());
+
+            boolean flag = user.equals(user_check);
+            log.info("user_equals_check: " + String.valueOf(flag));
+
+            if (flag) {
                 log.info("login_success");
-                session.setAttribute("login",user);
+                session.setAttribute("login", user);
                 return "redirect:/logincheck";
-            }else {
-                if(flag && !pwcheck.equals(user.getUserpassword())){
-                    log.info("login_fail: Wrong password");
-                }else {
-                    log.info("login_fail: No exist in DB");
-                }
+            } else {
+                log.info("login_fail");
                 return "redirect:/err";
             }
         }
-
         return "redirect:/login";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        log.info("ByeBye Logout success");
-        return "redirect:/login";
-    }
+//    @GetMapping("/logout")
+//    public String logout(HttpSession session) {
+//        session.invalidate();
+//        log.info("ByeBye Logout success");
+//        return "redirect:/login";
+//    }
 
     @PostMapping("/joinform")
     public User join(User user) { // @ModelAttribute 회원 추가 @RequestParam("useremail") String useremail,
         log.info("JOINFORMPOST");
-        if(!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()){
+        if (!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()) {
             log.info("signup");
-            log.info("user email: " + user.getUseremail() + ",  pw: " + user.getUserpassword());
-            log.info("User" + user.toString());
+            log.info("User: " + user.toString());
 
-            boolean flag = true;
-            List<User> userList= null;
-            userList = userService.selectUserInfo();
-            for(User u : userList){
-                if(u.getUseremail().equals(user.getUseremail())){
-                    flag = false;
-                    break;
-                }
-            }
-            if(flag){
+            User user_check = userService.getUserInfoByUseremail(user.getUseremail());
+
+            if (user_check == null) {
                 userService.insertUser(user);
                 log.info("join_success");
-            }else{
+            } else {
+//                log.info("User_check : " + user_check.toString());
+//                log.info("user_equals_check: " + String.valueOf(user.equals(user_check)));
+                log.info("user_email_check: " + String.valueOf(user.getUseremail().equals(user_check.getUseremail())));
+                log.info("user_pw_check: " + String.valueOf(user.getUserpassword().equals(user_check.getUserpassword())));
                 log.info("join_fail:exist in DB");
             }
 
-        }else{
+        } else {
             log.info("join_fail");
-       }
+        }
 
         return user;
     }
@@ -171,7 +138,7 @@ public class MainController {
         log.error("USER");
         log.info(user.getUseremail());
         User users = userService.getUserInfoByUseremail(user.getUseremail());
-        if(users == null)
+        if (users == null)
             return false;
         return true;
     }
@@ -191,20 +158,23 @@ public class MainController {
         return userService.getUserInfoByUseremail(useremail);
     }
 
-    @ResponseBody
-    @GetMapping("/insert")
-    public void insertuser(User user) {
-        userService.insertUser(user);
-        System.out.println("INSERT");
-    }
+//    @ResponseBody
+//    @GetMapping("/insert")
+//    public void insertuser(User user) {
+//        userService.insertUser(user);
+//        System.out.println("INSERT");
+//    }
 
     @ResponseBody
     @PostMapping("/insert")
     public boolean insert(@RequestBody User user) {
-        try{
+        try {
+            log.info("INSERT");
+            log.info(user.toString());
             userService.insertUser(user);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
+            log.info("INSERTERROR");
             e.printStackTrace();
             return false;
         }
@@ -213,7 +183,10 @@ public class MainController {
     @ResponseBody
     @GetMapping("/insert")
     public boolean check(@RequestBody User user) {
+        log.info("CHECK");
+        log.info(user.toString());
         User getUser = userService.getUserInfoByUseremail(user.getUseremail());
         return getUser.getUserpassword().equals(user.getUserpassword());
     }
+
 }

@@ -9,14 +9,6 @@
         src="https://code.jquery.com/jquery-3.6.0.slim.js"
         integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
         crossorigin="anonymous"></script>
-<script>
-
-    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
-    function goJoinForm() {
-        location.href="/joinform";
-    }
-
-</script>
 <body>
 <h1>LOGIN PAGE</h1><br><br>
 <form id="loginform" name="loginform" method="POST" action="login" style="padding: 10px"> <!--action="@{/login}*/-->
@@ -32,4 +24,30 @@
 </form>
 <div id="message">Login</div>
 </body>
+<script>
+
+    $(document).ready(function () {
+        $('#submit').click(function (){
+            console.log(JSON.stringify({useremail:$('#useremail').val(), userpassword:$('#userpassword').val()}))
+            $.ajax({
+                type:"POST",
+                url:"",
+                contentType:"application/json; charset=EUC-KR",
+                data : JSON.stringify({useremail:$('#useremail').val(), userpassword:$('#userpassword').val()})
+            })
+                .done((res) => {
+                    if(res == true)
+                        alert("login success")
+                    else
+                        alert('login fail')
+                })
+        })
+    })
+
+    // 회원가입 버튼 클릭시 회원가입 화면으로 이동
+    function goJoinForm() {
+        location.href="/joinform";
+    }
+
+</script>
 </html>
