@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>MyPAGE</h1>
-login success
+login success <br><br>
 <button type="submit" id="logout" onclick="goLogoutForm()">·Î±×¾Æ¿ô</button>
 </body>
 <script>

@@ -41,7 +41,7 @@ public class MainController {
 //        }
 //        response.addCookie(loginCookie);
 
-        return "/";
+        return "main";
     }
 
     // localhost:8080/
@@ -71,8 +71,11 @@ public class MainController {
     }
 
     @GetMapping("/logincheck")
-    public String logincheck() {
+    public String logincheck(HttpSession session) {
         log.info("LOGINCHECK");
+        if(session.getAttribute("login") == null){
+            return "redirect:/login";
+        }
         return "logincheck";
     }
 

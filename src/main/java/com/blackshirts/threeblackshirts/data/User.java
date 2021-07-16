@@ -39,10 +39,17 @@ public class User {
     public boolean isUseCookie() {
         return cookieUse;
     }
+
     public void setUseCookie(boolean cookieUse) {
         this.cookieUse = cookieUse;
     }
 
+//    public boolean matchPassword(String userpw) {
+//        if (this.userpassword.equals(userpw))
+//            return true;
+//        else
+//            return false;
+//    }
 
 
     @Override
