@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //@RestController // 데이터를 반환하는 어노테이션
@@ -26,9 +28,20 @@ public class MainController {
 
     // localhost:8080/
     @GetMapping("/")
-    public String main() {
+    public String main(User user, HttpServletResponse response) {
         log.info("MAIN");
-        return "main";
+//
+//        Cookie loginCookie = new Cookie("useremaul", user.getUseremail());
+//
+//        if (user.isCookieDel()) {
+//            loginCookie.setMaxAge(0);   // 즉시 지우기
+//            user.setUseremail(null);
+//        } else {
+//            loginCookie.setMaxAge(-1); //60*60*24*30 = 30일  / -1 = 세션이 끝나면 지움
+//        }
+//        response.addCookie(loginCookie);
+
+        return "/";
     }
 
     // localhost:8080/
@@ -48,7 +61,7 @@ public class MainController {
     @GetMapping("/login")
     public String login() {
         log.info("LOGIN");
-        return "login";
+        return "/login";
     }
 
     @GetMapping("/joinform")
@@ -70,32 +83,48 @@ public class MainController {
     }
 
     @PostMapping("/login")
-    public String login(User user, HttpSession session) throws Exception { // 로그인
+    public String login(User user, HttpSession session, HttpServletResponse response) throws Exception { // 로그인
         log.info("LoginPost");
+        String returnURL = "";
+
         if (session.getAttribute("login") != null) {
+            log.info("session_getAttribute");
             session.removeAttribute("login");
         }
 
-        if (!user.getUseremail().isEmpty() && !user.getUserpassword().isEmpty()) {
-            log.info("Login");
-            log.info("user_check: " + user.toString());
+        User n_user = user;
 
-            User user_check = userService.getUserInfoByUseremail(user.getUseremail());
+        if (n_user != null) {
+
+            log.info("Login");
+            log.info("user_check: " + n_user.toString());
+
+            User user_check = userService.getUserInfoByUseremail(n_user.getUseremail());
             log.info("db_user_check: " + user_check.toString());
 
-            boolean flag = user.equals(user_check);
+            boolean flag = n_user.equals(user_check);
             log.info("user_equals_check: " + String.valueOf(flag));
 
             if (flag) {
                 log.info("login_success");
-                session.setAttribute("login", user);
-                return "redirect:/logincheck";
+                session.setAttribute("login", n_user); // 세션 login 이름으로 user 객체를 저장
+                returnURL = "redirect:/logincheck";
+                log.info("cookie");
+                Cookie logincookie = new Cookie("loginCookie", session.getId());
+                logincookie.setPath("/");
+                logincookie.setMaxAge(-1); // 단위 = (초) 60*60*24*7 = 7일
+                response.addCookie(logincookie);
+                log.info("response_AddCookie");
+                log.info(logincookie.toString());
             } else {
                 log.info("login_fail");
-                return "redirect:/err";
+                returnURL = "redirect:/err";
             }
+
+        } else {
+            returnURL = "redirect:/login";
         }
-        return "redirect:/login";
+        return returnURL;
     }
 
 //    @GetMapping("/logout")
@@ -187,4 +216,24 @@ public class MainController {
         return getUser.getUserpassword().equals(user.getUserpassword());
     }
 
+//    @RequestMapping("/index")
+//    public String mallIndex(User user,
+//                            @CookieValue(value = "gender", required = false) Cookie loginCookie,
+//                            HttpServletRequest request) {
+//
+//        if (loginCookie != null)
+//            user.setUseremail(loginCookie.getValue());
+//
+//        return "/";
+//    }
+
+    // 로그아웃 하는 부분
+    @RequestMapping(value = "/logout")
+    public String logout(HttpSession session) {
+        log.info("LOGOUT");
+        session.invalidate(); // 세션 전체를 날려버림
+        log.info("session_invalidate");
+//      session.removeAttribute("login"); // 하나씩 하려면 이렇게 해도 됨.
+        return "redirect:/login"; // 로그아웃 후 게시글 목록으로 이동하도록...함
+    }
 }

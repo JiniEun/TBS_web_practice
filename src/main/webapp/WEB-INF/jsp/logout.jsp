@@ -3,17 +3,17 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
-    <title>Loginpage</title>
+    <title>LOGOUT</title>
 </head>
 <body>
-<h1>MyPAGE</h1>
-login success
-<button type="submit" id="logout" onclick="goLogoutForm()">로그아웃</button>
+<h1>LOGOUT</h1>
+logout
+<button type="submit" id="login" onclick="goLoginForm()">로그인</button>
 </body>
 <script>
     // 회원가입 버튼 클릭시 회원가입 화면으로 이동
-    function goLogoutForm() {
-        location.href="/logout";
+    function goLoginForm() {
+        location.href="/login";
     }
 </script>
 </html>

@@ -5,6 +5,7 @@ import java.util.Objects;
 public class User {
     private String useremail;
     private String userpassword;
+    private boolean cookieUse;
 
     public User(String useremail, String userpassword) {
         this.useremail = useremail;
@@ -34,6 +35,15 @@ public class User {
     public void setUserpassword(String userpassword) {
         this.userpassword = userpassword;
     }
+
+    public boolean isUseCookie() {
+        return cookieUse;
+    }
+    public void setUseCookie(boolean cookieUse) {
+        this.cookieUse = cookieUse;
+    }
+
+
 
     @Override
     public boolean equals(Object obj) {
