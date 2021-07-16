@@ -74,6 +74,7 @@ public class MainController {
     public String logincheck(HttpSession session) {
         log.info("LOGINCHECK");
         if(session.getAttribute("login") == null){
+            log.info("LOGIN_SESSION_NULL");
             return "redirect:/login";
         }
         return "logincheck";
@@ -114,8 +115,9 @@ public class MainController {
                 returnURL = "redirect:/logincheck";
                 log.info("cookie");
                 Cookie logincookie = new Cookie("loginCookie", session.getId());
+//                Cookie logincookie2 = new Cookie("loginCookie", user.getUseremail());
                 logincookie.setPath("/");
-                logincookie.setMaxAge(-1); // 단위 = (초) 60*60*24*7 = 7일
+                logincookie.setMaxAge(-1); // 단위 = (초) 60*60*24*7 = 7일, -1 = 세션이 끝나면 지움
                 response.addCookie(logincookie);
                 log.info("response_AddCookie");
                 log.info(logincookie.toString());
