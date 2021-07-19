@@ -73,16 +73,17 @@
 
         var email = form_data.user_email;
         var exptext = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+        if (!email) {
+            alert("아이디를 입력하세요.");
+            console.log("아이디를 입력하세요.");
+            return false;
+        }
         if (exptext.test(email) == false) {
             //이메일 형식이 알파벳+숫자@알파벳+숫자.알파벳+숫자 형식이 아닐경우
             alert("이메일형식이 올바르지 않습니다.");
             $('#useremail').focus();
             console.log("이메일형식이 올바르지 않습니다.");
-            return false;
-        }
-        if (!email) {
-            alert("아이디를 입력하세요.");
-            console.log("아이디를 입력하세요.");
             return false;
         }
         if (!form_data.user_pw) {

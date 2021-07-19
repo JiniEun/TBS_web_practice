@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> selectUserInfo() {
         List<User> list = rep.selectUserInfo();
-        for(User u : list)
+        for (User u : list)
             System.out.println(u);
         return list;
     }

@@ -44,19 +44,7 @@ public class MainController {
         return "main";
     }
 
-    // localhost:8080/
-    @GetMapping("/signup")
-    public String signup() {
-        log.info("SignUp");
-        return "signup";
-    }
     //localhost:8080/test
-
-    @GetMapping("/signin")
-    public String test() {
-        log.info("SignIn");
-        return "signin";
-    }
 
     @GetMapping("/login")
     public String login() {
@@ -73,7 +61,7 @@ public class MainController {
     @GetMapping("/logincheck")
     public String logincheck(HttpSession session) {
         log.info("LOGINCHECK");
-        if(session.getAttribute("login") == null){
+        if (session.getAttribute("login") == null) {
             log.info("LOGIN_SESSION_NULL");
             return "redirect:/login";
         }
@@ -114,8 +102,8 @@ public class MainController {
                 session.setAttribute("login", n_user); // 세션 login 이름으로 user 객체를 저장
                 returnURL = "redirect:/logincheck";
                 log.info("cookie");
-                Cookie logincookie = new Cookie("loginCookie", session.getId());
-//                Cookie logincookie2 = new Cookie("loginCookie", user.getUseremail());
+//                Cookie logincookie = new Cookie("loginCookie", session.getId());
+                Cookie logincookie = new Cookie("loginCookie", n_user.getUseremail());
                 logincookie.setPath("/");
                 logincookie.setMaxAge(-1); // 단위 = (초) 60*60*24*7 = 7일, -1 = 세션이 끝나면 지움
                 response.addCookie(logincookie);
@@ -234,11 +222,21 @@ public class MainController {
 
     // 로그아웃 하는 부분
     @RequestMapping(value = "/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, HttpServletRequest request) { // , HttpServletRequest request
         log.info("LOGOUT");
+        session.removeAttribute("login"); // 하나씩 하려면 이렇게 해도 됨.
         session.invalidate(); // 세션 전체를 날려버림
+        Cookie[] cookie = request.getCookies();
+
+        for(Cookie c : cookie){
+            if(c.getName().equals("loginCookie")){
+                log.info(c.toString());
+                c.setMaxAge(0);
+            }
+        }
+//        cookie delete
         log.info("session_invalidate");
-//      session.removeAttribute("login"); // 하나씩 하려면 이렇게 해도 됨.
+
         return "redirect:/login"; // 로그아웃 후 게시글 목록으로 이동하도록...함
     }
 }

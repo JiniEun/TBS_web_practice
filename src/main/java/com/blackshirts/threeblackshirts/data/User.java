@@ -82,5 +82,4 @@ public class User {
         result = prime * result + ((userpassword == null) ? 0 : userpassword.hashCode());
         return result;
     }
-
 }
